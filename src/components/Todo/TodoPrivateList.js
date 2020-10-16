@@ -5,8 +5,7 @@ import TodoFilters from "./TodoFilters";
 import gql from "graphql-tag"
  import { useQuery } from '@apollo/client';
 
-const GET_MY_TODOS = gql`
-query getMyTodos {
+const GET_MY_TODOS = gql`query getMyTodos {
   todos(where:{is_public:{_eq:false}},order_by:{created_at:desc}){
     id
     title
