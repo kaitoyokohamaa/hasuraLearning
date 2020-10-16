@@ -17,26 +17,33 @@ const ADD_TODO = gql`
 `;
 const TodoInput = ({ isPublic = false }) => {
   const [todoInput, setTodoInput] = useState("");
+
   const updateCache = (cache, { data }) => {
     if (isPublic) {
       return null;
     }
+
     const existingTodos = cache.readQuery({
       query: GET_MY_TODOS,
     });
+    console.log(existingTodos);
+
     const newTodo = data.insert_todos.returning[0];
     cache.writeQuery({
       query: GET_MY_TODOS,
       data: { todos: [newTodo, ...existingTodos.todos] },
     });
   };
+
   const resetInput = () => {
     setTodoInput("");
   };
-  const [addTodo, data] = useMutation(ADD_TODO, {
+
+  const [addTodo] = useMutation(ADD_TODO, {
     update: updateCache,
     onCompleted: resetInput,
   });
+
   return (
     <form
       className="formInput"
