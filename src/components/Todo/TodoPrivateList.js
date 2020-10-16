@@ -28,7 +28,7 @@ const TodoPrivateList = props => {
   };
 
   const clearCompleted = () => {};
-  const {todos} = props; 
+  const {todos} = prop
   let filteredTodos = todos;
   if (state.filter === "active") {
     filteredTodos = todos.filter(todo => todo.is_completed !== true);
