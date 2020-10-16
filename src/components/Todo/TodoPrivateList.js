@@ -2,38 +2,42 @@ import React, { useState, Fragment } from "react";
 
 import TodoItem from "./TodoItem";
 import TodoFilters from "./TodoFilters";
-import gql from "graphql-tag"
- import { useQuery } from '@apollo/client';
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/client";
 
-const GET_MY_TODOS = gql`query getMyTodos {
-  todos(where:{is_public:{_eq:false}},order_by:{created_at:desc}){
-    id
-    title
-    created_at
-    is_completed
+const GET_MY_TODOS = gql`
+  query getMyTodos {
+    todos(
+      where: { is_public: { _eq: false } }
+      order_by: { created_at: desc }
+    ) {
+      id
+      title
+      created_at
+      is_completed
+    }
   }
-}
-`
-const TodoPrivateList = props => {
+`;
+const TodoPrivateList = (props) => {
   const [state, setState] = useState({
     filter: "all",
     clearInProgress: false,
   });
 
-  const filterResults = filter => {
+  const filterResults = (filter) => {
     setState({
       ...state,
-      filter: filter
+      filter: filter,
     });
   };
 
   const clearCompleted = () => {};
-  const {todos} = prop
+  const { todos } = props;
   let filteredTodos = todos;
   if (state.filter === "active") {
-    filteredTodos = todos.filter(todo => todo.is_completed !== true);
+    filteredTodos = todos.filter((todo) => todo.is_completed !== true);
   } else if (state.filter === "completed") {
-    filteredTodos = todos.filter(todo => todo.is_completed === true);
+    filteredTodos = todos.filter((todo) => todo.is_completed === true);
   }
 
   const todoList = [];
@@ -57,16 +61,16 @@ const TodoPrivateList = props => {
     </Fragment>
   );
 };
-const TodoPrivateListQuery = () =>{
-    const [loading,error,data] = useQuery(GET_MY_TODOS);
+const TodoPrivateListQuery = () => {
+  const [loading, error, data] = useQuery(GET_MY_TODOS);
 
-    if(loading){
-      return <div>loading</div>
-    }
-    if(error){
-      return <div>Error!</div>
-    }
-    return <TodoPrivateList todos={data.todos} />
-}
+  if (loading) {
+    return <div>loading</div>;
+  }
+  if (error) {
+    return <div>Error!</div>;
+  }
+  return <TodoPrivateList todos={data.todos} />;
+};
 export default TodoPrivateListQuery;
-export  {GET_MY_TODOS}
+export { GET_MY_TODOS };
