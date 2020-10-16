@@ -2,8 +2,7 @@ import React, { useState, Fragment } from "react";
 
 import TodoItem from "./TodoItem";
 import TodoFilters from "./TodoFilters";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 
 const GET_MY_TODOS = gql`
   query getMyTodos {
@@ -33,6 +32,7 @@ const TodoPrivateList = (props) => {
 
   const clearCompleted = () => {};
   const { todos } = props;
+
   let filteredTodos = todos;
   if (state.filter === "active") {
     filteredTodos = todos.filter((todo) => todo.is_completed !== true);
@@ -62,12 +62,13 @@ const TodoPrivateList = (props) => {
   );
 };
 const TodoPrivateListQuery = () => {
-  const [loading, error, data] = useQuery(GET_MY_TODOS);
+  const { loading, error, data } = useQuery(GET_MY_TODOS);
 
   if (loading) {
     return <div>loading</div>;
   }
   if (error) {
+    console.log(error);
     return <div>Error!</div>;
   }
   return <TodoPrivateList todos={data.todos} />;

@@ -6,26 +6,31 @@ import TodoPublicWrapper from "./Todo/TodoPublicWrapper";
 import OnlineUsersWrapper from "./OnlineUsers/OnlineUsersWrapper";
 
 import { useAuth0 } from "./Auth/react-auth0-spa";
-import { ApolloClient, ApolloProvider, InMemoryCache,HttpLink } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  HttpLink,
+} from "@apollo/client";
 
 const createApolloClient = (authToken) => {
   return new ApolloClient({
     link: new HttpLink({
-      uri:"https://learn.hasura.io/graphql",
-      headers:{
-        Authorization:`Barer ${authToken}`
-      }
+      uri: "https://hasura.io/learn/graphql",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
     }),
-    cache: new InMemoryCache()
-  })
-}
+    cache: new InMemoryCache(),
+  });
+};
 
 const App = ({ idToken }) => {
   const { loading, logout } = useAuth0();
   if (loading) {
     return <div>Loading...</div>;
   }
-  const client = createApolloClient(idToken)
+  const client = createApolloClient(idToken);
   return (
     <ApolloProvider client={client}>
       <div>
